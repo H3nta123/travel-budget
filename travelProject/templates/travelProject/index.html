@@ -1,0 +1,50 @@
+{% extends 'travelProject/base.html' %}
+
+{% block title %}Мои путешествия — Travel Budget{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="display-5 fw-bold">🌍 Мои путешествия</h1>
+        <p class="text-muted">Отслеживайте расходы и планируйте бюджет</p>
+    </div>
+</div>
+
+<div class="row">
+    {% for trip in trips %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ trip.name }}</h5>
+                <div class="mb-3">
+                    <span class="badge bg-secondary">
+                        📅 {{ trip.start_date|date:"d M Y" }}
+                    </span>
+                    {% if trip.end_date %}
+                    <span class="badge bg-secondary">
+                        → {{ trip.end_date|date:"d M Y" }}
+                    </span>
+                    {% endif %}
+                </div>
+                <p class="card-text">
+                    💰 Бюджет: <strong>{{ trip.budget }} ₽</strong>
+                </p>
+                <a href="{% url 'travelProject:trip_detail' trip.id %}" class="btn btn-primary stretched-link">
+                    Открыть детали →
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <h5 class="alert-heading">🎒 Ещё нет путешествий</h5>
+            <p class="mb-0">
+                Добавьте первое путешествие через
+                <a href="/admin" class="alert-link">админ-панель</a>.
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

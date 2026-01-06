@@ -1,0 +1,195 @@
+{% extends 'travelProject/base.html' %}
+
+{% block title %}{{ trip.name }} — Travel Budget{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="row mb-4">
+    <div class="col">
+        <a href="{% url 'travelProject:index' %}" class="text-decoration-none mb-2 d-inline-block">
+            ← Назад к списку
+        </a>
+        <h2 class="fw-bold">{{ trip.name }}</h2>
+        <span class="badge bg-secondary">📅 {{ trip.start_date|date:"d M Y" }}</span>
+        {% if trip.end_date %}
+        <span class="badge bg-secondary">→ {{ trip.end_date|date:"d M Y" }}</span>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="stat-card budget">
+            <small>💰 Бюджет</small>
+            <h3>{{ trip.budget }} ₽</h3>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="stat-card spent">
+            <small>🔥 Потрачено</small>
+            <h3 class="text-danger">{{ total_spent }} ₽</h3>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="stat-card remaining">
+            <small>✨ Остаток</small>
+            <h3 class="{% if remaining_budget < 0 %}text-danger{% else %}text-success{% endif %}">
+                {{ remaining_budget }} ₽
+            </h3>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row mb-4">
+    <div class="col-md-6 mb-3">
+        <div class="chart-container">
+            <h5 class="chart-title">📊 Расходы по категориям</h5>
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="chart-container">
+            <h5 class="chart-title">📈 Динамика расходов</h5>
+            <canvas id="timelineChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Expenses Table -->
+<div class="card">
+    <div class="card-header bg-transparent">
+        <h4 class="mb-0">📋 История расходов</h4>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-striped mb-0">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Категория</th>
+                    <th>Дата</th>
+                    <th class="text-end">Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense.title }}</td>
+                    <td>
+                        <span class="badge bg-info">{{ expense.get_category_display }}</span>
+                    </td>
+                    <td>{{ expense.date|date:"d.m.Y" }}</td>
+                    <td class="text-end fw-bold">{{ expense.amount }} ₽</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center py-5">
+                        <div class="text-muted">
+                            <h5>📭 Расходов пока нет</h5>
+                            <p class="mb-0">
+                                Добавьте их через <a href="/admin">админку</a>
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Category data from Django
+    const categoryData = {
+        labels: {{ categories_json| safe }},
+    data: { { amounts_json | safe } }
+    };
+
+    // Timeline data from Django
+    const timelineData = {
+        labels: {{ dates_json| safe }},
+    data: { { daily_amounts_json | safe } }
+    };
+
+    // Colors for pie chart
+    const chartColors = [
+        '#667eea', '#764ba2', '#f093fb', '#f5576c',
+        '#4facfe', '#43e97b', '#fa709a', '#fee140'
+    ];
+
+    // Category Pie Chart
+    if (categoryData.labels.length > 0) {
+        new Chart(document.getElementById('categoryChart'), {
+            type: 'doughnut',
+            data: {
+                labels: categoryData.labels,
+                datasets: [{
+                    data: categoryData.data,
+                    backgroundColor: chartColors,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+    } else {
+        document.getElementById('categoryChart').parentElement.innerHTML =
+            '<p class="text-muted text-center py-5">Нет данных для отображения</p>';
+    }
+
+    // Timeline Bar Chart
+    if (timelineData.labels.length > 0) {
+        new Chart(document.getElementById('timelineChart'), {
+            type: 'bar',
+            data: {
+                labels: timelineData.labels,
+                datasets: [{
+                    label: 'Расходы (₽)',
+                    data: timelineData.data,
+                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            display: true,
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    } else {
+        document.getElementById('timelineChart').parentElement.innerHTML =
+            '<p class="text-muted text-center py-5">Нет данных для отображения</p>';
+    }
+</script>
+{% endblock %}

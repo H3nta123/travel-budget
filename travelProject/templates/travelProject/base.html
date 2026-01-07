@@ -1,100 +1,143 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Travel Budget{% endblock %}</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <!-- Custom CSS -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark mb-4">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'travelProject:index' %}">
-            ✈️ Travel Budget
-        </a>
-        
-        <div class="d-flex align-items-center">
-            <!-- Navigation Links -->
-            <ul class="navbar-nav me-3">
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'travelProject:index' %}">
-                        🏠 Главная
-                    </a>
-                </li>
-            </ul>
-            
-            <!-- Theme Toggle Button -->
-            <button class="theme-toggle" id="themeToggle" title="Переключить тему">
-                <span id="themeIcon">🌙</span>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'travelProject:index' %}">
+                ✈️ Travel Budget
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
             </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'travelProject:index' %}">🏠 Главная</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'travelProject:trip_create' %}">➕ Новое путешествие</a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <ul class="navbar-nav align-items-center">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-link text-white-50">👤 {{ user.username }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'travelProject:logout' %}">Выйти</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'travelProject:login' %}">Войти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-light btn-sm ms-2" href="{% url 'travelProject:register' %}">
+                            Регистрация
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <!-- Theme Toggle Button -->
+                    <li class="nav-item ms-3">
+                        <button class="theme-toggle" id="themeToggle" title="Переключить тему">
+                            <span id="themeIcon">🌙</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
     </div>
-</nav>
 
-<!-- Main Content -->
-<div class="container">
-    {% block content %}
-    <!-- Page content will be inserted here -->
-    {% endblock %}
-</div>
+    <!-- Main Content -->
+    <div class="container">
+        {% block content %}
+        <!-- Page content will be inserted here -->
+        {% endblock %}
+    </div>
 
-<!-- Footer -->
-<footer class="container mt-5 mb-4 text-center">
-    <p class="text-muted">
-        © 2024 Travel Budget — Учёт расходов в путешествиях
-    </p>
-</footer>
+    <!-- Footer -->
+    <footer class="container mt-5 mb-4 text-center">
+        <p class="text-muted">
+            © 2024 Travel Budget — Учёт расходов в путешествиях
+        </p>
+    </footer>
 
-<!-- Bootstrap 5 JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Theme Toggle Script -->
-<script>
-    // Theme management
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    const body = document.body;
-    
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        body.classList.add('dark-theme');
-        themeIcon.textContent = '☀️';
-    }
-    
-    // Toggle theme
-    themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-theme');
-        
-        if (body.classList.contains('dark-theme')) {
-            localStorage.setItem('theme', 'dark');
+    <!-- Theme Toggle Script -->
+    <script>
+        // Theme management
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const body = document.body;
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-theme');
             themeIcon.textContent = '☀️';
-        } else {
-            localStorage.setItem('theme', 'light');
-            themeIcon.textContent = '🌙';
         }
-    });
-</script>
 
-<!-- Custom Scripts -->
-{% block scripts %}
-{% endblock %}
+        // Toggle theme
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+
+            if (body.classList.contains('dark-theme')) {
+                localStorage.setItem('theme', 'dark');
+                themeIcon.textContent = '☀️';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeIcon.textContent = '🌙';
+            }
+        });
+    </script>
+
+    <!-- Custom Scripts -->
+    {% block scripts %}
+    {% endblock %}
 
 </body>
+
 </html>

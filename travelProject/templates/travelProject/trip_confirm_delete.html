@@ -1,0 +1,36 @@
+{% extends 'travelProject/base.html' %}
+
+{% block title %}Удалить путешествие — Travel Budget{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-body p-4 text-center">
+                <h2 class="text-danger mb-4">⚠️ Удаление путешествия</h2>
+
+                <p class="mb-4">
+                    Вы уверены, что хотите удалить путешествие
+                    <strong>«{{ trip.name }}»</strong>?
+                </p>
+
+                <p class="text-muted small">
+                    Все связанные расходы также будут удалены. Это действие необратимо.
+                </p>
+
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button type="submit" class="btn btn-danger">
+                            🗑️ Да, удалить
+                        </button>
+                        <a href="{% url 'travelProject:trip_detail' trip.id %}" class="btn btn-outline-secondary">
+                            Отмена
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

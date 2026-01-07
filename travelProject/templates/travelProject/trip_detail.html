@@ -15,6 +15,16 @@
         <span class="badge bg-secondary">→ {{ trip.end_date|date:"d M Y" }}</span>
         {% endif %}
     </div>
+    <div class="col-auto">
+        <div class="btn-group">
+            <a href="{% url 'travelProject:trip_edit' trip.id %}" class="btn btn-outline-primary">
+                ✏️ Редактировать
+            </a>
+            <a href="{% url 'travelProject:trip_delete' trip.id %}" class="btn btn-outline-danger">
+                🗑️ Удалить
+            </a>
+        </div>
+    </div>
 </div>
 
 <!-- Stats Cards -->
@@ -59,8 +69,11 @@
 
 <!-- Expenses Table -->
 <div class="card">
-    <div class="card-header bg-transparent">
+    <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
         <h4 class="mb-0">📋 История расходов</h4>
+        <a href="{% url 'travelProject:expense_add' trip.id %}" class="btn btn-primary btn-sm">
+            ➕ Добавить расход
+        </a>
     </div>
     <div class="card-body p-0">
         <table class="table table-striped mb-0">
@@ -70,6 +83,7 @@
                     <th>Категория</th>
                     <th>Дата</th>
                     <th class="text-end">Сумма</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -81,15 +95,22 @@
                     </td>
                     <td>{{ expense.date|date:"d.m.Y" }}</td>
                     <td class="text-end fw-bold">{{ expense.amount }} ₽</td>
+                    <td class="text-end">
+                        <a href="{% url 'travelProject:expense_delete' trip.id expense.id %}"
+                            class="btn btn-sm btn-outline-danger" title="Удалить">
+                            🗑️
+                        </a>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="4" class="text-center py-5">
+                    <td colspan="5" class="text-center py-5">
                         <div class="text-muted">
                             <h5>📭 Расходов пока нет</h5>
-                            <p class="mb-0">
-                                Добавьте их через <a href="/admin">админку</a>
-                            </p>
+                            <p class="mb-3">Добавьте первый расход для этого путешествия</p>
+                            <a href="{% url 'travelProject:expense_add' trip.id %}" class="btn btn-primary">
+                                ➕ Добавить расход
+                            </a>
                         </div>
                     </td>
                 </tr>

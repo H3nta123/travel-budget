@@ -76,8 +76,37 @@ def trip_detail(request, trip_id):
         'amounts_json': json.dumps(amounts),
         'dates_json': json.dumps(dates),
         'daily_amounts_json': json.dumps(daily_amounts),
+        'daily_amounts_json': json.dumps(daily_amounts),
+        'chart_image': get_plot(category_totals)
     }
     return render(request, 'travelProject/trip_detail.html', context)
+
+def get_plot(data):
+    """Генерация графика Matplotlib в base64"""
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    import io
+    import base64
+
+    if not data:
+        return None
+
+    plt.figure(figsize=(6, 4))
+    plt.pie(data.values(), labels=data.keys(), autopct='%1.1f%%', startangle=140)
+    plt.title('Расходы по категориям (Matplotlib)')
+    plt.axis('equal') 
+
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+    plt.close()
+
+    graphic = base64.b64encode(image_png)
+    graphic = graphic.decode('utf-8')
+    return graphic
 
 
 @login_required

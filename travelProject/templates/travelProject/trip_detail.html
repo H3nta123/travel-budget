@@ -67,6 +67,22 @@
     </div>
 </div>
 
+<!-- Matplotlib Chart -->
+{% if chart_image %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>📊 Статистика (Matplotlib)</h5>
+            </div>
+            <div class="card-body text-center">
+                <img src="data:image/png;base64,{{ chart_image }}" alt="График расходов" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <!-- Expenses Table -->
 <div class="card">
     <div class="card-header bg-transparent d-flex justify-content-between align-items-center">

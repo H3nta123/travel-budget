@@ -7,18 +7,17 @@ pycache/
 local_settings.py
 db.sqlite3
 media/
+Thumbs.db
 
 #Виртуальное окружение
-
 venv/
 env/
 .env
+.venv/
 
 #PyCharm
 
 .idea/
-
-#OS generated files
-
+.vscode/
+*.swp
 .DS_Store
-Thumbs.db

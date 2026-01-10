@@ -6,7 +6,6 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
-# Загружаем переменные окружения
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -15,16 +14,12 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-default-key-change-
 
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-# Разрешенные хосты
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'xn--80ae1arj3e.xn--p1ai,xn--80a0a5bj.xn--p1ai,85.198.82.83,localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'travelproject.site,www.travelproject.site,85.198.82.83,localhost,127.0.0.1').split(',')
 
-# === НАСТРОЙКИ ДЛЯ HTTPS ===
-# Критически важно для работы форм через HTTPS
-CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS', 'https://xn--80ae1arj3e.xn--p1ai,http://xn--80ae1arj3e.xn--p1ai,https://xn--80a0a5bj.xn--p1ai,https://85.198.82.83,http://127.0.0.1,http://localhost').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS', 'https://travelproject.site,http://travelproject.site,https://www.travelproject.site,https://85.198.82.83,http://127.0.0.1,http://localhost').split(',')
 
-# Если мы на HTTPS, делаем куки безопасными (опционально, если есть SSL)
 if not DEBUG:
-    SECURE_SSL_REDIRECT = False # Лучше делать редирект на уровне Nginx
+    SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
 
@@ -92,7 +87,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles' # Нужно для collectstatic на сервере
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / 'travelProject' / 'static',
 ]

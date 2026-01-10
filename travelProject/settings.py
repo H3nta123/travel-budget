@@ -11,19 +11,16 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# БЕЗОПАСНОСТЬ: Читаем секреты из env
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-default-key-change-me')
 
-# DEBUG должен быть False на продакшене, но True локально
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
 # Разрешенные хосты
-# xn--80a0a5bj.xn--p1ai — это Punycode для "травэл.рф"
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'xn--80a0a5bj.xn--p1ai,85.198.82.83,localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'xn--80ae1arj3e.xn--p1ai,xn--80a0a5bj.xn--p1ai,85.198.82.83,localhost,127.0.0.1').split(',')
 
 # === НАСТРОЙКИ ДЛЯ HTTPS ===
-# Это критически важно для работы форм через HTTPS
-CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS', 'https://xn--80a0a5bj.xn--p1ai,https://85.198.82.83,http://127.0.0.1,http://localhost').split(',')
+# Критически важно для работы форм через HTTPS
+CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS', 'https://xn--80ae1arj3e.xn--p1ai,http://xn--80ae1arj3e.xn--p1ai,https://xn--80a0a5bj.xn--p1ai,https://85.198.82.83,http://127.0.0.1,http://localhost').split(',')
 
 # Если мы на HTTPS, делаем куки безопасными (опционально, если есть SSL)
 if not DEBUG:
@@ -89,7 +86,7 @@ AUTH_PASSWORD_VALIDATORS = [
     { 'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
 ]
 
-LANGUAGE_CODE = 'ru-ru' # Поставил русский, так как интерфейс на русском
+LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True

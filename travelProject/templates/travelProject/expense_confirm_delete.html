@@ -12,7 +12,7 @@
                 <p class="mb-4">
                     Вы уверены, что хотите удалить расход
                     <strong>«{{ expense.title }}»</strong> на сумму
-                    <strong>{{ expense.amount }} ₽</strong>?
+                    <strong>{{ expense.amount }} {{ expense.currency.code }}</strong>?
                 </p>
 
                 <form method="post" class="mt-4">

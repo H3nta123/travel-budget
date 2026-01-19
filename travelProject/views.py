@@ -41,8 +41,8 @@ def trip_detail(request, trip_id):
     trip = get_object_or_404(Trip, pk=trip_id, user=request.user)
     expenses = trip.expenses.all().select_related('currency').order_by('-date')
 
-    total_spent = sum(exp.amount_in_rub for exp in expenses)
-    remaining_budget = trip.budget - total_spent
+    total_spent = round(sum(exp.amount_in_rub for exp in expenses),2)
+    remaining_budget = round(trip.budget - total_spent,2)
 
     category_totals = {}
     category_names = dict(Expense.CATEGORY_CHOICES)

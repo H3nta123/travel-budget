@@ -41,6 +41,59 @@ body.dark-theme {
     --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
+/* Глобальные оверрайды для темной темы */
+body.dark-theme {
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6,
+body.dark-theme p,
+body.dark-theme span,
+body.dark-theme div,
+body.dark-theme li,
+body.dark-theme label,
+body.dark-theme td,
+body.dark-theme th,
+body.dark-theme .card-title,
+body.dark-theme .card-header,
+body.dark-theme .display-5 {
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme .text-muted,
+body.dark-theme .card-subtitle,
+body.dark-theme .form-text,
+body.dark-theme small {
+    color: var(--text-secondary) !important;
+}
+
+/* Исправление для полей ввода */
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-theme input::placeholder {
+    color: var(--text-muted) !important;
+}
+
+/* Таблицы в темной теме */
+body.dark-theme .table {
+    --bs-table-color: var(--text-primary);
+    --bs-table-bg: transparent;
+    --bs-table-border-color: var(--border-color);
+    --bs-table-striped-color: var(--text-primary);
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.02);
+}
+
 /* ===========================================
    Base Styles
    =========================================== */
@@ -80,6 +133,7 @@ body.dark-theme .navbar {
     font-weight: 700;
     font-size: 1.5rem;
     letter-spacing: -0.5px;
+    color: white !important;
 }
 
 .navbar-brand:hover {
@@ -131,19 +185,6 @@ body.dark-theme .navbar {
     font-weight: 600;
 }
 
-.card-title {
-    color: var(--text-primary);
-    font-weight: 700;
-}
-
-.card-subtitle {
-    color: var(--text-secondary) !important;
-}
-
-.card-text {
-    color: var(--text-secondary);
-}
-
 /* ===========================================
    Stats Cards
    =========================================== */
@@ -156,21 +197,9 @@ body.dark-theme .navbar {
     transition: all var(--transition-speed);
 }
 
-.stat-card:hover {
-    transform: scale(1.02);
-}
-
-.stat-card.budget {
-    border-left: 4px solid var(--accent-color);
-}
-
-.stat-card.spent {
-    border-left: 4px solid var(--danger-color);
-}
-
-.stat-card.remaining {
-    border-left: 4px solid var(--success-color);
-}
+.stat-card.budget { border-left: 4px solid var(--accent-color); }
+.stat-card.spent { border-left: 4px solid var(--danger-color); }
+.stat-card.remaining { border-left: 4px solid var(--success-color); }
 
 .stat-card h3 {
     font-size: 2rem;
@@ -179,44 +208,8 @@ body.dark-theme .navbar {
 }
 
 .stat-card small {
-    color: var(--text-secondary);
-    font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-}
-
-/* ===========================================
-   Tables
-   =========================================== */
-
-.table {
-    color: var(--text-primary);
-}
-
-.table thead th {
-    background-color: var(--bg-secondary);
-    border-bottom: 2px solid var(--border-color);
-    color: var(--text-secondary);
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.5px;
-}
-
-.table tbody tr {
-    transition: background-color var(--transition-speed);
-}
-
-.table tbody tr:hover {
-    background-color: var(--bg-secondary);
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(0, 0, 0, 0.02);
-}
-
-body.dark-theme .table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(255, 255, 255, 0.02);
 }
 
 /* ===========================================
@@ -233,55 +226,17 @@ body.dark-theme .table-striped tbody tr:nth-of-type(odd) {
 .btn-primary {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: none;
-}
-
-.btn-primary:hover {
-    background: linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-.btn-outline-primary {
-    border-color: var(--accent-color);
-    color: var(--accent-color);
-}
-
-.btn-outline-primary:hover {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
+    color: white !important;
 }
 
 /* ===========================================
-   Badges
+   Forms
    =========================================== */
 
-.badge {
-    font-weight: 500;
-    padding: 0.5em 0.8em;
-    border-radius: 6px;
-}
-
-.badge.bg-info {
-    background: linear-gradient(135deg, #36d1dc 0%, #5b86e5 100%) !important;
-}
-
-.badge.bg-secondary {
-    background-color: var(--text-muted) !important;
-}
-
-/* ===========================================
-   Alerts
-   =========================================== */
-
-.alert {
-    border: none;
-    border-radius: 12px;
-    padding: 1.25rem;
-}
-
-.alert-info {
-    background: linear-gradient(135deg, rgba(54, 209, 220, 0.1) 0%, rgba(91, 134, 229, 0.1) 100%);
-    color: var(--accent-color);
+.form-control, .form-select {
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all var(--transition-speed);
 }
 
 /* ===========================================
@@ -300,101 +255,9 @@ body.dark-theme .table-striped tbody tr:nth-of-type(odd) {
 .chart-title {
     font-weight: 600;
     margin-bottom: 1rem;
-    color: var(--text-primary);
 }
 
-/* ===========================================
-   Forms
-   =========================================== */
-
-.form-control, .form-select {
-    background-color: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    border-radius: 8px;
-    padding: 0.75rem 1rem;
-    transition: all var(--transition-speed);
-}
-
-.form-control:focus, .form-select:focus {
-    background-color: var(--bg-secondary);
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
-    color: var(--text-primary);
-}
-
-.form-label {
-    color: var(--text-secondary);
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-}
-
-/* ===========================================
-   Animations
-   =========================================== */
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.fade-in-up {
-    animation: fadeInUp 0.5s ease-out forwards;
-}
-
-.card {
-    animation: fadeInUp 0.5s ease-out forwards;
-}
-
-/* Staggered animation for cards */
-.row .col-md-4:nth-child(1) .card { animation-delay: 0.1s; }
-.row .col-md-4:nth-child(2) .card { animation-delay: 0.2s; }
-.row .col-md-4:nth-child(3) .card { animation-delay: 0.3s; }
-.row .col-md-4:nth-child(4) .card { animation-delay: 0.4s; }
-.row .col-md-4:nth-child(5) .card { animation-delay: 0.5s; }
-.row .col-md-4:nth-child(6) .card { animation-delay: 0.6s; }
-
-/* ===========================================
-   Responsive
-   =========================================== */
-
-@media (max-width: 768px) {
-    .navbar-brand {
-        font-size: 1.25rem;
-    }
-    
-    .stat-card h3 {
-        font-size: 1.5rem;
-    }
-    
-    .chart-container {
-        padding: 1rem;
-    }
-}
-
-/* ===========================================
-   Scrollbar (Dark theme)
-   =========================================== */
-
-body.dark-theme::-webkit-scrollbar {
-    width: 10px;
-}
-
-body.dark-theme::-webkit-scrollbar-track {
-    background: var(--bg-primary);
-}
-
-body.dark-theme::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 5px;
-}
-
-body.dark-theme::-webkit-scrollbar-thumb:hover {
-    background: var(--text-muted);
-}
+/* Скроллбар для темной темы */
+body.dark-theme::-webkit-scrollbar { width: 10px; }
+body.dark-theme::-webkit-scrollbar-track { background: var(--bg-primary); }
+body.dark-theme::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 5px; }

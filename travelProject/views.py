@@ -81,8 +81,9 @@ def trip_detail(request, trip_id):
     }
     return render(request, 'travelProject/trip_detail.html', context)
 
+
 def get_plot(data):
-    """Генерация графика Matplotlib в base64"""
+    """Генерация графика Matplotlib в base64 с прозрачным фоном"""
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -92,13 +93,25 @@ def get_plot(data):
     if not data:
         return None
 
-    plt.figure(figsize=(6, 4))
-    plt.pie(data.values(), labels=data.keys(), autopct='%1.1f%%', startangle=140)
-    plt.title('Расходы по категориям (Matplotlib)')
-    plt.axis('equal') 
+    # Создаем фигуру с прозрачным фоном
+    plt.figure(figsize=(6, 4), facecolor='none')
+
+    text_color = '#00ffff'
+
+    # Строим график
+    wedges, texts, autotexts = plt.pie(
+        data.values(),
+        labels=data.keys(),
+        autopct='%1.1f%%',
+        startangle=140,
+        textprops={'color': text_color}  # Цвет текста подписей
+    )
+
+    plt.title('', color=text_color)
+    plt.axis('equal')
 
     buffer = io.BytesIO()
-    plt.savefig(buffer, format='png')
+    plt.savefig(buffer, format='png', transparent=True)
     buffer.seek(0)
     image_png = buffer.getvalue()
     buffer.close()

@@ -37,7 +37,8 @@
     </div>
     <div class="col-md-4 mb-3">
         <div class="stat-card spent">
-            <small>🔥 Потрачено</small>
+            <small>🔥 Потрачено (всего)</small>
+            <!-- Общая сумма всегда в рублях для статистики -->
             <h3 class="text-danger">{{ total_spent }} ₽</h3>
         </div>
     </div>
@@ -53,13 +54,7 @@
 
 <!-- Charts Row -->
 <div class="row mb-4">
-    <div class="col-md-6 mb-3">
-        <div class="chart-container">
-            <h5 class="chart-title">📊 Расходы по категориям</h5>
-            <canvas id="categoryChart"></canvas>
-        </div>
-    </div>
-    <div class="col-md-6 mb-3">
+    <div class="col-12">
         <div class="chart-container">
             <h5 class="chart-title">📈 Динамика расходов</h5>
             <canvas id="timelineChart"></canvas>
@@ -67,13 +62,13 @@
     </div>
 </div>
 
-<!-- Matplotlib chart -->
+<!-- Matplotlib Chart -->
 {% if chart_image %}
 <div class="row mb-4">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h5>📊 Статистика трат</h5>
+                <h5>📊 Статистика (Matplotlib)</h5>
             </div>
             <div class="card-body text-center">
                 <img src="data:image/png;base64,{{ chart_image }}" alt="График расходов" class="img-fluid">
@@ -110,7 +105,15 @@
                         <span class="badge bg-info">{{ expense.get_category_display }}</span>
                     </td>
                     <td>{{ expense.date|date:"d.m.Y" }}</td>
-                    <td class="text-end fw-bold">{{ expense.amount }} {{ expense.currency.code }}</td>
+                    <td class="text-end fw-bold">
+                        <!-- ЛОГИКА ОТОБРАЖЕНИЯ ВАЛЮТЫ -->
+                        {{ expense.amount }}
+                        {% if expense.currency %}
+                            {{ expense.currency.code }}
+                        {% else %}
+                            ₽
+                        {% endif %}
+                    </td>
                     <td class="text-end">
                         <a href="{% url 'travelProject:expense_delete' trip.id expense.id %}"
                             class="btn btn-sm btn-outline-danger" title="Удалить">
@@ -139,66 +142,29 @@
 
 {% block scripts %}
 <script>
-    // Category data from Django
-    const categoryData = {
-        labels: {{ categories_json| safe }},
-    data: { { amounts_json | safe } }
-    };
-
     // Timeline data from Django
     const timelineData = {
-        labels: {{ dates_json| safe }},
-    data: { { daily_amounts_json | safe } }
+        labels: {{ dates_json|safe }},
+        data: {{ daily_amounts_json|safe }}
     };
-
-    // Colors for pie chart
-    const chartColors = [
-        '#667eea', '#764ba2', '#f093fb', '#f5576c',
-        '#4facfe', '#43e97b', '#fa709a', '#fee140'
-    ];
-
-    // Category Pie Chart
-    if (categoryData.labels.length > 0) {
-        new Chart(document.getElementById('categoryChart'), {
-            type: 'doughnut',
-            data: {
-                labels: categoryData.labels,
-                datasets: [{
-                    data: categoryData.data,
-                    backgroundColor: chartColors,
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            usePointStyle: true
-                        }
-                    }
-                },
-                cutout: '60%'
-            }
-        });
-    } else {
-        document.getElementById('categoryChart').parentElement.innerHTML =
-            '<p class="text-muted text-center py-5">Нет данных для отображения</p>';
-    }
 
     // Timeline Bar Chart
     if (timelineData.labels.length > 0) {
         new Chart(document.getElementById('timelineChart'), {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: timelineData.labels,
                 datasets: [{
                     label: 'Расходы (₽)',
                     data: timelineData.data,
-                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
-                    borderRadius: 8
+                    backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                    borderColor: '#667eea',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#667eea',
+                    pointRadius: 5,
+                    fill: true
                 }]
             },
             options: {

@@ -12,7 +12,7 @@
 Backend: Python 3, Django 5
 Database: PostgreSQL (Production) / SQLite (Dev)
 Frontend: HTML5, Bootstrap 5, Chart.js
-Аналитика: Matplotlib, Pandas (опционально)
+Аналитика: Matplotlib
 API: ExchangeRate-API (курсы валют)
 
 🚀 Как запустить проект
@@ -27,7 +27,7 @@ pip install -r requirements.txt
 
 
 Настройте переменные окружения:
-Создайте файл .env в корне проекта (рядом с manage.py) и добавьте настройки базы данных:
+Создайте файл .env в корне проекта и добавьте настройки базы данных:
 DJANGO_DEBUG=True
 DJANGO_SECRET_KEY=your_secret_key
 DB_NAME=travel_budget
